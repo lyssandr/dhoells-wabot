@@ -4,10 +4,10 @@
   <p><b>Massive Multiplayer RPG & AI-Driven WhatsApp Architecture</b></p>
 
   <p>
-    <img src="https://img.shields.io/badge/Version-3.0.0-blue.svg?style=for-the-badge" alt="Version" />
-    <img src="https://img.shields.io/badge/Engine-Node.js-339933.svg?style=for-the-badge&logo=nodedotjs" alt="Node" />
-    <img src="https://img.shields.io/badge/Library-Baileys-ff69b4.svg?style=for-the-badge&logo=whatsapp" alt="Baileys" />
-    <img src="https://img.shields.io/badge/AI-Gemini%202.5-orange.svg?style=for-the-badge&logo=google" alt="Gemini" />
+    <img src="https://img.shields.io/badge/Version-3.2.0-blue.svg?style=for-the-badge" alt="Version" />
+    <img src="https://img.shields.io/badge/Engine-Node.js_22%2B-339933.svg?style=for-the-badge&logo=nodedotjs" alt="Node" />
+    <img src="https://img.shields.io/badge/Database-SQLite_WAL-003B57.svg?style=for-the-badge&logo=sqlite" alt="SQLite" />
+    <img src="https://img.shields.io/badge/AI-Gemini_Vision_Multimodal-orange.svg?style=for-the-badge&logo=google" alt="Gemini" />
   </p>
 </div>
 
@@ -28,7 +28,7 @@ The codebase is organized using a strict Modular / MVC-like pattern to ensure sc
 ```text
 📦 CLARYN-AI
  ┣ 📂 config/           # Core configuration files (Rates, Limits, Game Tuning)
- ┣ 📂 database/         # Persistent JSON storage (Memory, Users, Guilds)
+ ┣ 📂 database/         # Persistent SQLite Storage with WAL Mode (Users, Guilds, Market)
  ┣ 📂 modules/          # Core logic separated by domain
  ┃ ┣ 📂 admin/          # Owner-level execution, bans, and evaluation commands
  ┃ ┣ 📂 ai/             # Gemini Brain, Context Windows, and ElevenLabs Opus TTS
@@ -54,7 +54,7 @@ The codebase is organized using a strict Modular / MVC-like pattern to ensure sc
 ## ⚙️ Quick Start
 
 ### 1. Requirements
-- **Node.js** v18 or higher
+- **Node.js** v22 or higher (required for native `node:sqlite`)
 - **FFmpeg** (Required for Audio/Opus conversion)
 - **Git**
 

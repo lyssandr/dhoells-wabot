@@ -255,25 +255,26 @@ async function connectToWhatsApp() {
             if (action === 'add') {
                 const groupMetadata = await sock.groupMetadata(id);
                 for (const participant of participants) {
-                    // Delay antar welcome untuk avoid rate limit
                     await new Promise(r => setTimeout(r, 2500));
-                    const welcomeText = `ðŸ‘‹ Selamat datang @${participant.split('@')[0]} di *${groupMetadata.subject}*!\n\nðŸ“œ ketik *.menu* untuk melihat command\nðŸŽ® ketik *.daftar* untuk bermain RPG\n\nSemoga betah ya~ ðŸŽ‰`;
+                    const welcomeText = `👋 Selamat datang @${participant.split('@')[0]} di *${groupMetadata.subject}*.
+
+Ketik *.menu* untuk melihat daftar perintah.`;
                     await sock.sendMessage(id, { text: welcomeText, mentions: [participant] });
                 }
             } else if (action === 'remove') {
                 for (const participant of participants) {
                     await new Promise(r => setTimeout(r, 2500));
-                    await sock.sendMessage(id, { text: `ðŸ‘‹ Selamat jalan @${participant.split('@')[0]}, semoga tenang disana~`, mentions: [participant] });
+                    await sock.sendMessage(id, { text: `@${participant.split('@')[0]} telah meninggalkan grup.`, mentions: [participant] });
                 }
             } else if (action === 'promote') {
                 for (const participant of participants) {
                     await new Promise(r => setTimeout(r, 2500));
-                    await sock.sendMessage(id, { text: `ðŸŽ‰ Selamat @${participant.split('@')[0]} sekarang jadi admin grup!`, mentions: [participant] });
+                    await sock.sendMessage(id, { text: `🛡️ @${participant.split('@')[0]} telah diangkat menjadi admin grup.`, mentions: [participant] });
                 }
             } else if (action === 'demote') {
                 for (const participant of participants) {
                     await new Promise(r => setTimeout(r, 2500));
-                    await sock.sendMessage(id, { text: `ðŸ˜… @${participant.split('@')[0]} di-demote dari admin.`, mentions: [participant] });
+                    await sock.sendMessage(id, { text: `ℹ️ @${participant.split('@')[0]} tidak lagi menjabat sebagai admin grup.`, mentions: [participant] });
                 }
             }
         } catch (e) {

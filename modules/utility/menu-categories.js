@@ -186,14 +186,14 @@ const MENU_CATEGORIES = {
     },
     owner: {
         icon: '\uD83D\uDC51', title: 'Owner Panel',
-        hint: '\uD83D\uDD12 Panel absolut khusus Owner bot.',
+        hint: '👑 Panel konfigurasi dan kontrol khusus Owner bot.',
         sections: [
-            { header: '\uD83D\uDC51 ADMIN MANAGEMENT', commands: [
-                ['.addadmin @tag/nomor', '\u2795 Tambah Admin Bot global'],
-                ['.deladmin @tag/nomor', '\u2796 Hapus Admin Bot global'],
-                ['.listadmin', '\uD83D\uDCCB Lihat daftar Admin Bot'],
+            { header: '👑 ADMIN MANAGEMENT', commands: [
+                ['.addadmin @tag/nomor', '➕ Tambah Admin Bot global'],
+                ['.deladmin @tag/nomor', '➖ Hapus Admin Bot global'],
+                ['.listadmin', '📋 Lihat daftar Admin Bot'],
             ]},
-            { header: '\uD83D\uDC51 GOD MODE \u2014 CHEAT', commands: [
+            { header: '👑 GAME MASTER — ECONOMY & STATS', commands: [
                 ['.addcoin <jml> <g/s/b> @tag', '\uD83D\uDCB0 Tambah coin (Gold/Silver/Bronze)'],
                 ['.setcoin / .debuff <jml> @tag', '\uD83D\uDCC9 Set spesifik coin / Bikin miskin'],
                 ['.createitem <format>', '\uD83D\uDEE0\uFE0F Create item kustom & pasarkan permanen'],
@@ -211,7 +211,7 @@ const MENU_CATEGORIES = {
                 ['.resetplayer @tag', '\uD83D\uDD04 Reset data RPG player'],
                 ['.allplayer', '\uD83D\uDC65 Lihat semua data player'],
             ]},
-            { header: '\uD83D\uDC51 FITUR DEWA \u2014 KASINO CONTROL', commands: [
+            { header: '👑 CASINO PROBABILITY CONTROL', commands: [
                 ['.setwin @tag', '\uD83C\uDFC6 Player selalu MENANG kasino'],
                 ['.setlose @tag', '\uD83D\uDC80 Player selalu KALAH kasino'],
                 ['.setnormal @tag', '\u2696\uFE0F Reset ke mode NORMAL'],

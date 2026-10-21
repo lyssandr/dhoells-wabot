@@ -1,7 +1,7 @@
 {
-  "name": "botwa-push",
-  "version": "1.0.0",
-  "description": "Dhoells Bot - WhatsApp RPG Bot",
+  "name": "dhoells-wabot",
+    "version": "3.2.0",
+    "description": "Claryn AI & High-Performance WhatsApp Architecture integrating SQLite, Gemini Vision, and RPG System",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
