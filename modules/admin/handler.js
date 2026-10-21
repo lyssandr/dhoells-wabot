@@ -526,7 +526,7 @@ async function handleAdminCommand(sock, sender, msg, participant, textMessage, a
 
     // ==================== OWNER ONLY: LACAK, KONTAK, PUSH ====================
     if (['lacak', 'track', 'cekno'].includes(command)) {
-        if (!textMessage) { await sock.sendMessage(sender, { text: '📌 *.lacak 085975216127* / *.lacak 8.8.8.8* / *.lacak google.com*' }, { quoted: msg }); return; }
+        if (!textMessage) { await sock.sendMessage(sender, { text: '📌 *.lacak 081234567890* / *.lacak 8.8.8.8* / *.lacak google.com*' }, { quoted: msg }); return; }
         const inp = textMessage.trim();
         const isIP = /^(\d{1,3}\.){3}\d{1,3}$/.test(inp);
         const isDomain = /^[a-zA-Z0-9]([a-zA-Z0-9\-]*\.)+[a-zA-Z]{2,}$/.test(inp);
@@ -604,7 +604,7 @@ async function handleAdminCommand(sock, sender, msg, participant, textMessage, a
         let targetJid = '';
         if (cm.length > 0) targetJid = cm[0];
         else if (textMessage) { let num = textMessage.replace(/[\s\-\+\(\)]/g, ''); if (num.startsWith('0')) num = '62' + num.substring(1); if (!num.startsWith('62')) num = '62' + num; targetJid = num + '@s.whatsapp.net'; }
-        else { await sock.sendMessage(sender, { text: '📌 *.cariuser 085975216127* / *.cariuser @tag*' }, { quoted: msg }); return; }
+        else { await sock.sendMessage(sender, { text: '📌 *.cariuser 081234567890* / *.cariuser @tag*' }, { quoted: msg }); return; }
         const targetNum = targetJid.split('@')[0];
         await sock.sendMessage(sender, { text: `🔍 _Mencari +${targetNum} di semua grup..._` }, { quoted: msg });
         try {

@@ -11,8 +11,9 @@ marketplace.json
 bounty_data.json
 banned_users.json
 admin_users.json
-
-# Education content — not for public repo
-jadwal/
-Modul Fisika/
-MATKUL/
+sessions_*.json
+error.log
+*.db
+*.db-wal
+*.db-shm
+database/*.db*

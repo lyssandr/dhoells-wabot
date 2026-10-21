@@ -184,25 +184,6 @@ const MENU_CATEGORIES = {
             ['.unmute', '\uD83D\uDD0A Unmute grup'],
         ]
     },
-    education: {
-        icon: '\uD83D\uDCDA', title: 'Education & Jadwal',
-        hint: '\uD83D\uDCD6 Modul fisika, jadwal kuliah, & materi per kelas (KTI-A/B/C).',
-        sections: [
-            { header: '\uD83D\uDCDA MATERI MATKUL', commands: [
-                ['.matkul', '\uD83D\uDCCB Lihat daftar kelas & jumlah materi'],
-                ['.matkul <kelas>', '\uD83D\uDCC2 Lihat daftar materi per kelas (contoh: .matkul kti-a)'],
-                ['.matkul <kelas> <nomor>', '\uD83D\uDCE5 Kirim file/gambar/link pilihan (contoh: .matkul kti-a 1)'],
-            ]},
-            { header: '\uD83D\uDCDA MODUL FISIKA', commands: [
-                ['.fisika', '\uD83D\uDCCB Lihat daftar modul fisika tersedia'],
-                ['.fisika <kode>', '\uD83D\uDCE5 Download modul PDF (contoh: .fisika m1)'],
-            ]},
-            { header: '\uD83D\uDCC5 JADWAL KULIAH', commands: [
-                ['.jadwal', '\uD83D\uDCCB Lihat daftar jadwal tersedia'],
-                ['.jadwal <kode>', '\uD83D\uDDBC\uFE0F Kirim jadwal (contoh: .jadwal uts)'],
-            ]},
-        ]
-    },
     owner: {
         icon: '\uD83D\uDC51', title: 'Owner Panel',
         hint: '\uD83D\uDD12 Panel absolut khusus Owner bot.',

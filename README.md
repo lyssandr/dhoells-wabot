@@ -32,7 +32,6 @@ The codebase is organized using a strict Modular / MVC-like pattern to ensure sc
  ┣ 📂 modules/          # Core logic separated by domain
  ┃ ┣ 📂 admin/          # Owner-level execution, bans, and evaluation commands
  ┃ ┣ 📂 ai/             # Gemini Brain, Context Windows, and ElevenLabs Opus TTS
- ┃ ┣ 📂 education/      # Utility modules for academic scheduling and formulas
  ┃ ┣ 📂 games/          # Casino, Gacha, and interactive mini-games
  ┃ ┣ 📂 media/          # Web scraping, image manipulation (Sharp), and FFmpeg
  ┃ ┣ 📂 rpg/            # Complex RPG ecosystem (Dungeons, Raids, Economy, Stats)

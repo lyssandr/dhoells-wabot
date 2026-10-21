@@ -14,6 +14,7 @@ const fs = require('fs');
 const path = require('path');
 const { callAI } = require('./engine');
 const { generateTikTokTTS } = require('./tts');
+const { downloadMediaMessage } = require('@whiskeysockets/baileys');
 
 /**
  * Base personality injected into every prompt.
@@ -115,15 +116,45 @@ const MODE_LABELS = { rephrase: '\uD83D\uDD04 PARAFRASE', rangkum: '\uD83D\uDCCB
  */
 async function handleAi(sock, sender, msg, participant, textMessage) {
     let inputText = textMessage;
-    const contextInfo = msg.message.extendedTextMessage?.contextInfo;
-    if (!inputText && contextInfo?.quotedMessage) inputText = contextInfo.quotedMessage.conversation || contextInfo.quotedMessage.extendedTextMessage?.text || '';
+    const contextInfo = msg.message?.extendedTextMessage?.contextInfo;
+    if (!inputText && contextInfo?.quotedMessage) {
+        inputText = contextInfo.quotedMessage.conversation || contextInfo.quotedMessage.extendedTextMessage?.text || contextInfo.quotedMessage.imageMessage?.caption || '';
+    }
+
+    // Support Vision (analisis gambar yang dikirim langsung atau di-quote)
+    let imageBuffer = null;
+    let mimeType = 'image/jpeg';
+    const isImageDirect = msg.message?.imageMessage;
+    const isImageQuoted = contextInfo?.quotedMessage?.imageMessage;
+    if (isImageDirect) {
+        try {
+            imageBuffer = await downloadMediaMessage(msg, 'buffer', {});
+            mimeType = msg.message.imageMessage.mimetype || 'image/jpeg';
+        } catch (e) {
+            console.error('[AI Vision] Gagal download gambar langsung:', e.message);
+        }
+    } else if (isImageQuoted) {
+        try {
+            const quotedMsgObj = { message: contextInfo.quotedMessage };
+            imageBuffer = await downloadMediaMessage(quotedMsgObj, 'buffer', {});
+            mimeType = contextInfo.quotedMessage.imageMessage.mimetype || 'image/jpeg';
+        } catch (e) {
+            console.error('[AI Vision] Gagal download gambar yang di-quote:', e.message);
+        }
+    }
+
+    if (!inputText && imageBuffer) {
+        inputText = 'Tolong perhatikan dan jelaskan apa yang ada di gambar ini ya.';
+    }
     
-    if (!inputText) { 
-        await sock.sendMessage(sender, { text: '\uD83D\uDCCC *.claryn <pesan>*\n\n_Contoh: .claryn selamat pagi sayang_' }, { quoted: msg }); 
+    if (!inputText && !imageBuffer) { 
+        await sock.sendMessage(sender, { text: `📌 *.claryn <pesan/gambar>*
+
+_Contoh: .claryn selamat pagi sayang_ atau kirim/quote gambar dengan caption *.claryn*` }, { quoted: msg }); 
         return; 
     }
 
-    const itLower = inputText.toLowerCase();
+    const itLower = (inputText || '').toLowerCase();
 
     // === VN TRIGGERS ===
     const introKeywords = ['perkenalan', 'kenalin', 'kenalan', 'siapa kamu', 'siapa claryn', 'introduce', 'perkenalkan diri', 'kamu siapa', 'lo siapa'];
@@ -161,7 +192,7 @@ async function handleAi(sock, sender, msg, participant, textMessage) {
     }
 
     try { 
-        const response = await callAI(buildPrompt('ai', inputText, pushName, sender, historyText)); 
+        const response = await callAI(buildPrompt('ai', inputText, pushName, sender, historyText), imageBuffer, mimeType); 
         if (!response) { 
             await sock.sendMessage(sender, { text: '\u274C Maaf sayang, aku lagi agak pusing. Coba lagi bentar ya...' }, { quoted: msg }); 
             return; 

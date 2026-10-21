@@ -42,7 +42,6 @@ function normalizeMenuCategory(value) {
         pin: 'image', pinterest: 'image', gambar: 'image', images: 'image',
         music: 'media', musik: 'media', audio: 'media',
         tools: 'utility', util: 'utility', ai_tools: 'ai', rpgadventure: 'rpg',
-        modul: 'education', fisika: 'education', pelajaran: 'education',
         kasino: 'rpg', casino: 'rpg', judi: 'rpg', slot: 'rpg', coinflip: 'rpg', dice: 'rpg', tebak: 'rpg'
     };
     

@@ -19,9 +19,9 @@ const BOT_CONFIG = {
     
     // ── ACCESS CONTROL ──
     ADMIN_NUMBERS: [],
-    OWNER_NUMBER: '6285975216127@s.whatsapp.net',
-    OWNER_LID: '143362233520260@lid',
-    OWNER_NUMBERS: ['6285975216127'], // Bare numbers for flexible regex matching
+    OWNER_NUMBER: process.env.OWNER_NUMBER ? (process.env.OWNER_NUMBER.includes('@') ? process.env.OWNER_NUMBER : `${process.env.OWNER_NUMBER}@s.whatsapp.net`) : '',
+    OWNER_LID: process.env.OWNER_LID ? (process.env.OWNER_LID.includes('@') ? process.env.OWNER_LID : `${process.env.OWNER_LID}@lid`) : '',
+    OWNER_NUMBERS: process.env.OWNER_NUMBERS ? process.env.OWNER_NUMBERS.split(',').map(s => s.trim()) : (process.env.OWNER_NUMBER ? [process.env.OWNER_NUMBER.replace(/\D/g, '')] : []),
     
     // ── FILE SYSTEM PATHS ──
     TEMP_DIR: './temp_audio',
@@ -105,7 +105,7 @@ const COOLDOWNS = {
 // ════════════════════════════════════════════════════════════════════════════════════════════════════
 // MENU ROUTING SYSTEM
 // ════════════════════════════════════════════════════════════════════════════════════════════════════
-const MENU_ORDER = ['rpg', 'games', 'image', 'media', 'ai', 'utility', 'education', 'admin', 'owner'];
+const MENU_ORDER = ['rpg', 'games', 'image', 'media', 'ai', 'utility', 'admin', 'owner'];
 
 const MENU_COMMANDS = {
     rpg: '.menurpg', 
@@ -114,7 +114,6 @@ const MENU_COMMANDS = {
     media: '.menumedia',
     ai: '.menuclaryn', 
     utility: '.menuutil', 
-    education: '.menueducation',
     admin: '.menuadmin', 
     owner: '.menuowner'
 };
@@ -128,7 +127,6 @@ const MENU_ALIAS = {
     'menumedia': 'media', 'menusmedia': 'media', 'menumusic': 'media', 'menusticker': 'media',
     'menuai': 'ai', 'menuclaryn': 'ai', 'menuchat': 'ai', 'menutanya': 'ai',
     'menuutil': 'utility', 'menuutility': 'utility', 'menuutilitas': 'utility', 'menucuaca': 'utility',
-    'menueducation': 'education', 'menuedu': 'education', 'menujadwal': 'education', 'menumatkul': 'education', 'menufisika': 'education',
     'menuadmin': 'admin', 'panel': 'admin',
     'menuowner': 'owner', 'menugod': 'owner',
     
@@ -139,7 +137,6 @@ const MENU_ALIAS = {
     'media': 'media', 'musik': 'media', 'lagu': 'media', 'sticker': 'media',
     'ai': 'ai', 'chat': 'ai', 'tanya': 'ai', 'claryn': 'ai',
     'util': 'utility', 'utility': 'utility', 'cuaca': 'utility',
-    'edu': 'education', 'education': 'education', 'jadwal': 'education', 'matkul': 'education', 'fisika': 'education',
     'admin': 'admin', 'owner': 'owner', 'god': 'owner',
     
     // Pin/media submenu aliases

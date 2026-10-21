@@ -1,51 +1,56 @@
 /**
  * @file engine.js
- * @description Core AI processing engine featuring Multi-Key Rotation and Fallback strategies.
+ * @description Core AI processing engine featuring Multimodal (Vision) support,
+ *              Multi-Key Rotation and Fallback strategies.
  *              Integrates Google Gemini (Primary) and Pollinations (Fallback) endpoints.
  * @author OWL ABE
- * @version 3.0.0
+ * @version 3.1.0
  * @license MIT
  */
 
-// ════════════════════════════════════════════════════════════════════════════════════════════════════
-// IMPORTS
-// ════════════════════════════════════════════════════════════════════════════════════════════════════
 const axios = require('axios');
 const { BOT_CONFIG } = require('../../config');
 
-// ════════════════════════════════════════════════════════════════════════════════════════════════════
-// CORE AI LOGIC
-// ════════════════════════════════════════════════════════════════════════════════════════════════════
-
 /**
- * Sends a prompt to the configured AI models using a multi-key rotation and multi-model fallback approach.
+ * Sends a prompt (and optional image) to AI models with multi-key rotation and fallbacks.
  * 
- * Strategy:
- * 1. Iterates through available Gemini API keys.
- * 2. Attempts inference with `gemini-2.5-flash-lite`, falls back to `gemini-2.5-flash`.
- * 3. If all Gemini endpoints fail (e.g., rate limits or quotas), degrades gracefully to Pollinations.ai.
- * 
- * @param {string} prompt - The crafted prompt text to be processed by the LLM.
- * @returns {Promise<string|null>} Resolves to the AI response string, or null if all engines fail.
+ * @param {string} prompt - Text prompt
+ * @param {Buffer|string|null} imageBuffer - Optional image buffer or base64 string
+ * @param {string} mimeType - Optional mimeType (e.g. image/jpeg, image/png)
+ * @returns {Promise<string|null>}
  */
-async function callAI(prompt) {
+async function callAI(prompt, imageBuffer = null, mimeType = 'image/jpeg') {
     let result = null;
     const { GEMINI_API_KEYS } = BOT_CONFIG;
 
-    // --- PHASE 1: PRIMARY ENGINE (GOOGLE GEMINI) ---
+    // --- PHASE 1: PRIMARY ENGINE (GOOGLE GEMINI MULTIMODAL) ---
     if (Array.isArray(GEMINI_API_KEYS) && GEMINI_API_KEYS.length > 0) {
         for (const apiKey of GEMINI_API_KEYS) {
             if (!apiKey || apiKey === 'YOUR_GEMINI_API_KEY') continue;
             
-            const models = ['gemini-2.5-flash-lite', 'gemini-2.5-flash'];
+            const models = ['gemini-2.5-flash-lite', 'gemini-2.5-flash', 'gemini-1.5-flash'];
             
             for (const model of models) {
                 try {
                     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+                    
+                    const parts = [{ text: prompt }];
+                    if (imageBuffer) {
+                        const base64Data = Buffer.isBuffer(imageBuffer) 
+                            ? imageBuffer.toString('base64') 
+                            : imageBuffer;
+                        parts.push({
+                            inlineData: {
+                                mimeType: mimeType || 'image/jpeg',
+                                data: base64Data
+                            }
+                        });
+                    }
+
                     const payload = {
-                        contents: [{ parts: [{ text: prompt }] }],
+                        contents: [{ parts }],
                         generationConfig: { 
-                            temperature: 0.9, 
+                            temperature: 0.85, 
                             topP: 0.95, 
                             maxOutputTokens: 4096 
                         }
@@ -53,7 +58,7 @@ async function callAI(prompt) {
 
                     const { data } = await axios.post(url, payload, { 
                         headers: { 'Content-Type': 'application/json' }, 
-                        timeout: 30000 
+                        timeout: 35000 
                     });
 
                     result = data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -61,16 +66,14 @@ async function callAI(prompt) {
                 } catch (error) {
                     const status = error.response?.status || error.message;
                     console.warn(`[AI Engine] Gemini ${model} (Key: ...${apiKey.slice(-4)}) execution failed: ${status}`);
-                    
-                    // Proceed to next model/key on failure
-                    if (error.response?.status === 400) continue; 
+                    if (error.response?.status === 400 && !imageBuffer) continue; 
                 }
             }
         }
     }
 
-    // --- PHASE 2: FALLBACK ENGINE (POLLINATIONS POST API) ---
-    if (!result) {
+    // --- PHASE 2: FALLBACK ENGINE (POLLINATIONS POST API - Text Only) ---
+    if (!result && !imageBuffer) {
         try {
             console.warn('[AI Engine] Primary engine failed. Triggering fallback: Pollinations (POST)');
             const payload = {
@@ -91,8 +94,8 @@ async function callAI(prompt) {
         }
     }
 
-    // --- PHASE 3: TERTIARY FALLBACK (POLLINATIONS GET API) ---
-    if (!result) {
+    // --- PHASE 3: TERTIARY FALLBACK (POLLINATIONS GET API - Text Only) ---
+    if (!result && !imageBuffer) {
         try {
             console.warn('[AI Engine] Secondary engine failed. Triggering tertiary fallback: Pollinations (GET)');
             const encodedPrompt = encodeURIComponent(prompt);
@@ -106,13 +109,9 @@ async function callAI(prompt) {
         }
     }
 
-    // All engines exhausted
     return null;
 }
 
-// ════════════════════════════════════════════════════════════════════════════════════════════════════
-// EXPORTS
-// ════════════════════════════════════════════════════════════════════════════════════════════════════
 module.exports = { 
     callAI 
 };
