@@ -147,6 +147,11 @@ const { handleAi, handleAiVn, handleRephrase } = require('./modules/ai/handler')
 // Admin
 const { handleAdminCommand } = require('./modules/admin/handler');
 
+// Education (generic, user-provided content folders)
+const { handleFisika } = require('./modules/education/fisika');
+const { handleJadwal } = require('./modules/education/jadwal');
+const { handleMatkul } = require('./modules/education/matkul');
+
 // Kasino
 const { handleSlot, handleCoinflip, handleDice, handleTebak, handleKasino, handleJudiDuel, handleJudiWar, handleJudiSlot, handleJudiTerima } = require('./modules/rpg/kasino');
 
@@ -361,6 +366,7 @@ Ketik *.menu* untuk melihat daftar perintah.`;
                 case 'menupin': case 'menuimage': case 'menumedia': case 'menuutility': case 'menuutil':
                 case 'menuadmin': case 'menuowner': case 'pinmenu': case 'imagemenu': case 'mediamenu':
                 case 'utilitymenu': case 'adminmenu': case 'ownermenu':
+                case 'menueducation': case 'educationmenu':
                     await handleMenu(sock, sender, msg, participant, textMessage, command); break;
                 case 'help':
                     await handleHelp(sock, sender, msg, participant, textMessage); break;
@@ -524,6 +530,14 @@ Ketik *.menu* untuk melihat daftar perintah.`;
                     await handlePet(sock, sender, msg, participant, textMessage); break;
                 case 'party':
                     await handleParty(sock, sender, msg, participant, textMessage); break;
+
+                // ==================== EDUCATION ====================
+                case 'fisika': case 'modulfisika': case 'fisikamodul':
+                    await handleFisika(sock, sender, msg, participant, textMessage); break;
+                case 'jadwal': case 'schedule': case 'kuliah':
+                    await handleJadwal(sock, sender, msg, participant, textMessage); break;
+                case 'matkul': case 'materi':
+                    await handleMatkul(sock, sender, msg, participant, textMessage); break;
 
                 // ==================== KASINO ====================
                 case 'kasino': case 'casino': case 'judi':

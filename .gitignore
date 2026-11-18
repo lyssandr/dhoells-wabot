@@ -17,3 +17,8 @@ error.log
 *.db-wal
 *.db-shm
 database/*.db*
+
+# Education content — user-provided, not for public repo
+jadwal/
+Modul Fisika/
+MATKUL/
