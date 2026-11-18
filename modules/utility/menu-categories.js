@@ -186,7 +186,7 @@ const MENU_CATEGORIES = {
     },
     education: {
         icon: '\uD83D\uDCDA', title: 'Education & Jadwal',
-        hint: '\uD83D\uDCD6 Modul, jadwal kuliah, & materi per kelas.',
+        hint: '\uD83D\uDCD6 Modul, jadwal kuliah, & materi per kelas. (Owner/Admin only)',
         sections: [
             { header: '\uD83D\uDCDA MATERI MATKUL', commands: [
                 ['.matkul', '\uD83D\uDCCB Lihat daftar kelas & jumlah materi'],

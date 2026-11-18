@@ -7,6 +7,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { isPrivileged } = require('../utility/db');
+
+// Maksimal ukuran file yang dikirim (16 MB, sesuai batas dokumen WhatsApp).
+const MAX_FILE_SIZE_BYTES = 16 * 1024 * 1024;
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp']);
 const TEXT_EXTS = new Set(['.txt', '.md']);
@@ -155,7 +159,7 @@ function formatClassList(baseDir = findMatkulDir()) {
 
     if (!classes.length) {
         text += '❌ Folder MATKUL belum berisi kelas.\n';
-        text += `📂 Path: ${baseDir}`;
+        text += 'Isi folder MATKUL dengan folder kelas dulu.';
         return text;
     }
 
@@ -238,6 +242,12 @@ function parseInput(textMessage) {
 }
 
 async function handleMatkul(sock, sender, msg, participant, textMessage) {
+    // Hanya Owner/Admin Bot yang boleh mengunduh file dari folder lokal.
+    if (!isPrivileged(participant || sender)) {
+        await sock.sendMessage(sender, { text: '⛔ Hanya *Owner/Admin Bot* yang bisa pakai perintah ini.' }, { quoted: msg });
+        return;
+    }
+
     const baseDir = findMatkulDir();
     const { classInput, itemNumber } = parseInput(textMessage);
 
@@ -268,8 +278,27 @@ async function handleMatkul(sock, sender, msg, participant, textMessage) {
     // Kirim file yang dipilih
     const file = files[index];
     if (!fs.existsSync(file.path)) {
+        console.error('[MATKUL] File tidak ditemukan:', file.path);
         await sock.sendMessage(sender, {
-            text: `❌ File materi *${file.name}* tidak ditemukan.\n📂 Path: ${file.path}`,
+            text: `❌ File materi *${file.name}* tidak ditemukan.`,
+        }, { quoted: msg });
+        return;
+    }
+
+    // Cek ukuran file sebelum dibaca utuh ke memori (termasuk file teks)
+    let fileSize;
+    try {
+        fileSize = fs.statSync(file.path).size;
+    } catch (err) {
+        console.error('[MATKUL] Gagal membaca ukuran file:', file.path, err.message);
+        await sock.sendMessage(sender, {
+            text: `❌ File materi *${file.name}* tidak ditemukan.`,
+        }, { quoted: msg });
+        return;
+    }
+    if (fileSize > MAX_FILE_SIZE_BYTES) {
+        await sock.sendMessage(sender, {
+            text: `❌ File materi *${file.name}* terlalu besar (${(fileSize / 1024 / 1024).toFixed(1)} MB). Maksimal 16 MB.`,
         }, { quoted: msg });
         return;
     }
@@ -303,7 +332,7 @@ async function handleMatkul(sock, sender, msg, participant, textMessage) {
     } catch (err) {
         console.error('[MATKUL ERROR]', err.message);
         await sock.sendMessage(sender, {
-            text: `❌ Gagal mengirim materi *${file.name}*.\nError: ${err.message}`,
+            text: `❌ Gagal mengirim materi *${file.name}*. Coba lagi nanti.`,
         }, { quoted: msg });
     }
 }

@@ -7,6 +7,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { isPrivileged } = require('../utility/db');
+
+// Maksimal ukuran file yang dikirim (16 MB, sesuai batas dokumen WhatsApp).
+const MAX_FILE_SIZE_BYTES = 16 * 1024 * 1024;
 
 // Mapping kode modul ke file PDF
 const MODUL_MAP = {
@@ -85,6 +89,12 @@ function getAvailableList() {
 }
 
 async function handleFisika(sock, sender, msg, participant, textMessage) {
+    // Hanya Owner/Admin Bot yang boleh mengunduh file dari folder lokal.
+    if (!isPrivileged(participant || sender)) {
+        await sock.sendMessage(sender, { text: '⛔ Hanya *Owner/Admin Bot* yang bisa pakai perintah ini.' }, { quoted: msg });
+        return;
+    }
+
     const input = textMessage.trim().toLowerCase();
 
     // Tanpa argumen → tampilkan daftar modul
@@ -106,8 +116,27 @@ async function handleFisika(sock, sender, msg, participant, textMessage) {
 
     // Cek file ada
     if (!fs.existsSync(filePath)) {
+        console.error('[FISIKA] File tidak ditemukan:', filePath);
         await sock.sendMessage(sender, {
-            text: `❌ File modul *${modul.title}* tidak ditemukan.\nPath: ${filePath}\n\nPastikan file ada di folder "Modul Fisika/".`
+            text: `❌ File modul *${modul.title}* tidak ditemukan.\n\nPastikan file ada di folder "Modul Fisika/".`
+        }, { quoted: msg });
+        return;
+    }
+
+    // Cek ukuran file sebelum dibaca utuh ke memori
+    let fileSize;
+    try {
+        fileSize = fs.statSync(filePath).size;
+    } catch (err) {
+        console.error('[FISIKA] Gagal membaca ukuran file:', filePath, err.message);
+        await sock.sendMessage(sender, {
+            text: `❌ File modul *${modul.title}* tidak ditemukan.\n\nPastikan file ada di folder "Modul Fisika/".`
+        }, { quoted: msg });
+        return;
+    }
+    if (fileSize > MAX_FILE_SIZE_BYTES) {
+        await sock.sendMessage(sender, {
+            text: `❌ File modul *${modul.title}* terlalu besar (${(fileSize / 1024 / 1024).toFixed(1)} MB). Maksimal 16 MB.`
         }, { quoted: msg });
         return;
     }
@@ -124,7 +153,7 @@ async function handleFisika(sock, sender, msg, participant, textMessage) {
     } catch (err) {
         console.error('[FISIKA ERROR]', err.message);
         await sock.sendMessage(sender, {
-            text: `❌ Gagal mengirim modul *${modul.title}*.\nError: ${err.message}`
+            text: `❌ Gagal mengirim modul *${modul.title}*. Coba lagi nanti.`
         }, { quoted: msg });
     }
 }

@@ -68,6 +68,8 @@ Daftar lengkap ada di dalam bot: ketik `.menu`, lalu pilih kategorinya.
 
 Modul `modules/education/` mengirim file dari folder lokal kamu — jadwal kuliah, modul, dan materi per kelas. Folder `jadwal/`, `Modul Fisika/`, dan `MATKUL/` **tidak disertakan di repo ini** dan sudah masuk `.gitignore`; isi sendiri dengan file kamu, lalu sesuaikan peta kode di dalam file modulnya (contoh: `.jadwal uts`, `.fisika m1`, `.matkul <nama-kelas>`). Jalankan `bash setup-folders.sh` untuk membuat folder-folder itu.
 
+Perintah education hanya bisa dipakai Owner/Admin Bot (`isPrivileged`), dan file di atas 16 MB ditolak dengan pesan ramah. Pesan error ke pengguna tidak menampilkan path server; path lengkap hanya dicatat di log server.
+
 ---
 
 ## Cara menjalankan

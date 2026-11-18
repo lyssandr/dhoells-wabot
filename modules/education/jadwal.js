@@ -7,6 +7,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { isPrivileged } = require('../utility/db');
+
+// Maksimal ukuran file yang dikirim (16 MB, sesuai batas dokumen WhatsApp).
+const MAX_FILE_SIZE_BYTES = 16 * 1024 * 1024;
 
 // Mapping kode jadwal ke file gambar
 const JADWAL_MAP = {
@@ -49,6 +53,12 @@ function getAvailableList() {
 }
 
 async function handleJadwal(sock, sender, msg, participant, textMessage) {
+    // Hanya Owner/Admin Bot yang boleh mengunduh file dari folder lokal.
+    if (!isPrivileged(participant || sender)) {
+        await sock.sendMessage(sender, { text: '⛔ Hanya *Owner/Admin Bot* yang bisa pakai perintah ini.' }, { quoted: msg });
+        return;
+    }
+
     const input = textMessage.trim().toLowerCase();
 
     // Tanpa argumen → tampilkan daftar jadwal
@@ -70,8 +80,27 @@ async function handleJadwal(sock, sender, msg, participant, textMessage) {
 
     // Cek file ada
     if (!fs.existsSync(filePath)) {
+        console.error('[JADWAL] File tidak ditemukan:', filePath);
         await sock.sendMessage(sender, {
-            text: `❌ File jadwal *${jadwal.title}* tidak ditemukan.\nPath: ${filePath}\n\nPastikan file ada di folder jadwal/.`
+            text: `❌ File jadwal *${jadwal.title}* tidak ditemukan.\n\nPastikan file ada di folder jadwal/.`
+        }, { quoted: msg });
+        return;
+    }
+
+    // Cek ukuran file sebelum dibaca utuh ke memori
+    let fileSize;
+    try {
+        fileSize = fs.statSync(filePath).size;
+    } catch (err) {
+        console.error('[JADWAL] Gagal membaca ukuran file:', filePath, err.message);
+        await sock.sendMessage(sender, {
+            text: `❌ File jadwal *${jadwal.title}* tidak ditemukan.\n\nPastikan file ada di folder jadwal/.`
+        }, { quoted: msg });
+        return;
+    }
+    if (fileSize > MAX_FILE_SIZE_BYTES) {
+        await sock.sendMessage(sender, {
+            text: `❌ File jadwal *${jadwal.title}* terlalu besar (${(fileSize / 1024 / 1024).toFixed(1)} MB). Maksimal 16 MB.`
         }, { quoted: msg });
         return;
     }
@@ -86,7 +115,7 @@ async function handleJadwal(sock, sender, msg, participant, textMessage) {
     } catch (err) {
         console.error('[JADWAL ERROR]', err.message);
         await sock.sendMessage(sender, {
-            text: `❌ Gagal mengirim jadwal *${jadwal.title}*.\nError: ${err.message}`
+            text: `❌ Gagal mengirim jadwal *${jadwal.title}*. Coba lagi nanti.`
         }, { quoted: msg });
     }
 }
