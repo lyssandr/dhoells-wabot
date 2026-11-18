@@ -1,10 +1,13 @@
 {
   "name": "dhoells-wabot",
-    "version": "3.2.0",
-    "description": "Claryn AI & High-Performance WhatsApp Architecture integrating SQLite, Gemini Vision, and RPG System",
+  "version": "3.2.0",
+  "description": "Claryn AI & High-Performance WhatsApp Architecture integrating SQLite, Gemini Vision, and RPG System",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
@@ -15,7 +18,6 @@
     "fluent-ffmpeg": "^2.1.3",
     "msedge-tts": "^2.0.7",
     "pino": "^9.6.0",
-    "readline": "^1.3.0",
     "sharp": "^0.33.5",
     "youtube-dl-exec": "^3.0.10",
     "yt-search": "^2.11.1"
