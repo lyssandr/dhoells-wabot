@@ -30,7 +30,8 @@ Di grup, panggil bot wajib pakai prefix `.` — contohnya `.claryn halo`.
 | **Downloader** | Download video/foto dari link (`.dl`) — Instagram dan TikTok jalan; YouTube masih kena bot-check Google. |
 | **Stiker & olah media** | Stiker biasa (`.stiker`), stiker bergerak (`.stikergerak`), ubah video jadi GIF (`.togif`), dan perbaikan kualitas video (`.jernih`, `.smooth`). |
 | **Gambar AI** | Generate gambar (`.gambar`) dan edit foto dengan AI (`.edit`). |
-| **Menu tombol** | Menu utama dan sub-menu (RPG, game, media, AI, utility, admin, owner) dengan tombol interaktif. |
+| **Menu tombol** | Menu utama dan sub-menu (RPG, game, media, AI, utility, education, admin, owner) dengan tombol interaktif. |
+| **Education** | Kirim jadwal kuliah, modul, dan materi per kelas dari folder lokal kamu (`.jadwal`, `.fisika`, `.matkul`). |
 | **RPG** | Daftar class (warrior, archer, mage, assassin, dan lainnya), hunt, dungeon 1–100, raid, arena PvP ranked, guild, party, market, bounty, kasino, pet, dan survival (stamina, HP, karma). |
 | **Mini-game** | Gacha anime, suit, uno, dadu, rolet, slot, dan game lainnya. |
 | **Temp mail** | Email sementara untuk daftar layanan (`.tempmail`). |
@@ -41,7 +42,8 @@ Di grup, panggil bot wajib pakai prefix `.` — contohnya `.claryn halo`.
 | Perintah | Fungsi |
 |---|---|
 | `.menu` | Menu utama |
-| `.menurpg` / `.menugame` / `.menumedia` / `.menuclaryn` / `.menuutil` | Menu per kategori |
+| `.menurpg` / `.menugame` / `.menumedia` / `.menuclaryn` / `.menuutil` / `.menueducation` | Menu per kategori |
+| `.jadwal <kode>` / `.fisika <kode>` / `.matkul <kelas>` | Lihat jadwal, modul, dan materi kuliah |
 | `.claryn <pertanyaan>` | Ngobrol dengan AI (bisa juga kirim gambar) |
 | `.vn <pertanyaan>` | Jawaban AI sebagai voice note |
 | `.peek` | Buka ulang foto/video sekali-lihat (balas pesannya, owner only) |
@@ -59,6 +61,12 @@ Di grup, panggil bot wajib pakai prefix `.` — contohnya `.claryn halo`.
 | `.help <topik>` | Bantuan per topik, contoh `.help rpg` |
 
 Daftar lengkap ada di dalam bot: ketik `.menu`, lalu pilih kategorinya.
+
+---
+
+## Education (opsional)
+
+Modul `modules/education/` mengirim file dari folder lokal kamu — jadwal kuliah, modul, dan materi per kelas. Folder `jadwal/`, `Modul Fisika/`, dan `MATKUL/` **tidak disertakan di repo ini** dan sudah masuk `.gitignore`; isi sendiri dengan file kamu, lalu sesuaikan peta kode di dalam file modulnya (contoh: `.jadwal uts`, `.fisika m1`, `.matkul <nama-kelas>`). Jalankan `bash setup-folders.sh` untuk membuat folder-folder itu.
 
 ---
 

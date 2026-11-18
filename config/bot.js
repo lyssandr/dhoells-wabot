@@ -105,7 +105,7 @@ const COOLDOWNS = {
 // ════════════════════════════════════════════════════════════════════════════════════════════════════
 // MENU ROUTING SYSTEM
 // ════════════════════════════════════════════════════════════════════════════════════════════════════
-const MENU_ORDER = ['rpg', 'games', 'image', 'media', 'ai', 'utility', 'admin', 'owner'];
+const MENU_ORDER = ['rpg', 'games', 'image', 'media', 'ai', 'utility', 'education', 'admin', 'owner'];
 
 const MENU_COMMANDS = {
     rpg: '.menurpg', 
@@ -114,6 +114,7 @@ const MENU_COMMANDS = {
     media: '.menumedia',
     ai: '.menuclaryn', 
     utility: '.menuutil', 
+    education: '.menueducation',
     admin: '.menuadmin', 
     owner: '.menuowner'
 };
@@ -127,6 +128,7 @@ const MENU_ALIAS = {
     'menumedia': 'media', 'menusmedia': 'media', 'menumusic': 'media', 'menusticker': 'media',
     'menuai': 'ai', 'menuclaryn': 'ai', 'menuchat': 'ai', 'menutanya': 'ai',
     'menuutil': 'utility', 'menuutility': 'utility', 'menuutilitas': 'utility', 'menucuaca': 'utility',
+    'menueducation': 'education', 'menuedu': 'education', 'menujadwal': 'education', 'menumatkul': 'education', 'menufisika': 'education',
     'menuadmin': 'admin', 'panel': 'admin',
     'menuowner': 'owner', 'menugod': 'owner',
     
@@ -137,11 +139,12 @@ const MENU_ALIAS = {
     'media': 'media', 'musik': 'media', 'lagu': 'media', 'sticker': 'media',
     'ai': 'ai', 'chat': 'ai', 'tanya': 'ai', 'claryn': 'ai',
     'util': 'utility', 'utility': 'utility', 'cuaca': 'utility',
+    'edu': 'education', 'education': 'education', 'jadwal': 'education', 'matkul': 'education', 'fisika': 'education',
     'admin': 'admin', 'owner': 'owner', 'god': 'owner',
     
     // Pin/media submenu aliases
     'pinmenu': 'image', 'imagemenu': 'image', 'mediamenu': 'media',
-    'utilitymenu': 'utility', 'adminmenu': 'admin', 'ownermenu': 'owner'
+    'utilitymenu': 'utility', 'educationmenu': 'education', 'adminmenu': 'admin', 'ownermenu': 'owner'
 };
 
 // ════════════════════════════════════════════════════════════════════════════════════════════════════
