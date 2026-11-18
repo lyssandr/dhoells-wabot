@@ -15,7 +15,7 @@ Bot WhatsApp berbasis [Baileys](https://github.com/WhiskeySockets/Baileys) (`@wh
 
 ## Apa itu bot ini?
 
-BOTWATSAP adalah bot WhatsApp modular: satu nomor bot bisa dipakai untuk ngobrol dengan AI, main RPG, main game, bikin stiker, download video, sampai cek jadwal kuliah.
+BOTWATSAP adalah bot WhatsApp modular: satu nomor bot bisa dipakai untuk ngobrol dengan AI, main RPG, main game, bikin stiker, dan download video.
 
 Prefix perintah: `.` (titik). Contoh: ketik `.menu` untuk melihat menu.
 
@@ -31,7 +31,6 @@ Prefix perintah: `.` (titik). Contoh: ketik `.menu` untuk melihat menu.
 | **RPG** | Daftar class (warrior, archer, mage, assassin, dan lainnya), hunt, dungeon 1–100, raid, arena PvP ranked, guild, party, market, bounty, kasino, pet, dan survival (stamina, HP, karma). |
 | **Mini-game** | Gacha anime, suit (RPS), dan game lainnya. |
 | **Media** | Stiker, download media, dan olah gambar/audio (Sharp + FFmpeg). |
-| **Jadwal kuliah** | Jadwal dan pengingat kuliah (lihat juga bagian live di bawah). |
 | **Keamanan** | Rate limiter sliding window anti-spam, dan penanganan error supaya bot tidak crash saat API timeout. |
 
 ### Perintah yang paling sering dipakai
@@ -46,7 +45,6 @@ Prefix perintah: `.` (titik). Contoh: ketik `.menu` untuk melihat menu.
 | `.dungeon` / `.dg` | Masuk dungeon |
 | `.shop` / `.inv` | Toko dan inventory RPG |
 | `.gacha` | Gacha karakter anime |
-| `.jadwal` | Jadwal kuliah |
 | `.ping` | Cek latency dan penggunaan memori bot |
 | `.help <topik>` | Bantuan per topik, contoh `.help rpg` |
 
@@ -64,7 +62,8 @@ Bot live BOTWATSAP di VPS sudah dikembangkan lebih jauh dari snapshot repo ini. 
 - **`.dl <link>`** — download video/foto (Instagram dan TikTok jalan; YouTube masih kena bot-check Google).
 - **`.stiker`, `.stikergerak`, `.jernih`, `.smooth`** — stiker biasa, stiker bergerak, dan perbaikan kualitas video.
 - **`.gambar`** — generate gambar, **`.edit`** — edit foto dengan AI.
-- **Notifikasi kuliah otomatis** — pengingat jadwal sebelum kelas mulai; di grup, panggil bot wajib pakai prefix `.`.
+- **Aturan grup** — di grup, panggil bot wajib pakai prefix `.`.
+- **Jadwal tidak disertakan** — jadwal kampus tidak ada di repo ini; pengguna bisa memasukkan jadwalnya sendiri.
 
 Kalau kamu clone repo ini, yang kamu dapat adalah snapshot 21 Oktober 2026 — bukan salinan 1:1 bot live. Sinkronisasi kode live ke repo ini masih perlu dilakukan terpisah.
 
