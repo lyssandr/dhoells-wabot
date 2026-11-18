@@ -4,7 +4,8 @@
   "description": "Claryn AI & High-Performance WhatsApp Architecture integrating SQLite, Gemini Vision, and RPG System",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "node --test"
   },
   "engines": {
     "node": ">=22"

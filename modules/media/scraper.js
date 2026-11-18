@@ -5,6 +5,16 @@
 
 const axios = require('axios');
 
+// Maksimal ukuran file yang diunduh (16 MB, sesuai batas dokumen WhatsApp).
+// Tanpa batas, satu gambar/video besar dari internet bisa menghabiskan RAM VPS.
+const MAX_DOWNLOAD_BYTES = 16 * 1024 * 1024;
+
+function tooLargeError(bytes, maxBytes) {
+    const err = new Error(`File terlalu besar (${(bytes / 1024 / 1024).toFixed(1)} MB). Maksimal ${(maxBytes / 1024 / 1024).toFixed(1)} MB.`);
+    err.code = 'DOWNLOAD_TOO_LARGE';
+    return err;
+}
+
 function buildImageSearchQueries(query) {
     const cq = String(query || '').trim().replace(/\s+/g, ' ');
     if (!cq) return [];
@@ -35,12 +45,25 @@ async function scrapePinterest(query, count = 1) {
     return [...new Set(images)].sort(() => Math.random() - 0.5).slice(0, count);
 }
 
-async function downloadImage(url) {
-    const r = await axios.get(url, {
-        responseType: 'arraybuffer', timeout: 15000,
-        headers: { 'User-Agent': 'Mozilla/5.0', 'Referer': url.includes('pinimg.com') ? 'https://id.pinterest.com/' : 'https://www.google.com/' }
-    });
-    return Buffer.from(r.data);
+async function downloadImage(url, options = {}) {
+    const maxBytes = options.maxBytes || MAX_DOWNLOAD_BYTES;
+    let r;
+    try {
+        r = await axios.get(url, {
+            responseType: 'arraybuffer', timeout: 15000,
+            maxContentLength: maxBytes, maxBodyLength: maxBytes,
+            headers: { 'User-Agent': 'Mozilla/5.0', 'Referer': url.includes('pinimg.com') ? 'https://id.pinterest.com/' : 'https://www.google.com/' }
+        });
+    } catch (e) {
+        // axios melempar ERR_BAD_RESPONSE saat maxContentLength terlampaui.
+        if (e.code === 'ERR_BAD_RESPONSE' && /maxContentLength/i.test(e.message || '')) {
+            throw tooLargeError(maxBytes + 1, maxBytes);
+        }
+        throw e;
+    }
+    const buf = Buffer.from(r.data);
+    if (buf.length > maxBytes) throw tooLargeError(buf.length, maxBytes);
+    return buf;
 }
 
 async function sendImageSearchResults(sock, s, msg, images, query, maxSend) {
@@ -55,4 +78,4 @@ async function sendImageSearchResults(sock, s, msg, images, query, maxSend) {
     return sent;
 }
 
-module.exports = { buildImageSearchQueries, addUniqueImages, scrapePinterest, downloadImage, sendImageSearchResults };
+module.exports = { buildImageSearchQueries, addUniqueImages, scrapePinterest, downloadImage, sendImageSearchResults, MAX_DOWNLOAD_BYTES };
