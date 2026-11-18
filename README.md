@@ -5,7 +5,7 @@ Bot WhatsApp berbasis [Baileys](https://github.com/WhiskeySockets/Baileys) (`@wh
 ![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?style=flat-square&logo=nodedotjs)
 ![Baileys](https://img.shields.io/badge/Baileys-6.7-25D366?style=flat-square&logo=whatsapp)
 ![Database](https://img.shields.io/badge/Database-SQLite_WAL-003B57?style=flat-square&logo=sqlite)
-![AI](https://img.shields.io/badge/AI-Gemini-orange?style=flat-square)
+![AI](https://img.shields.io/badge/AI-Agnes_%2B_GLM-orange?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 
 ---
@@ -24,7 +24,7 @@ Di grup, panggil bot wajib pakai prefix `.` — contohnya `.claryn halo`.
 
 | Fitur | Keterangan |
 |---|---|
-| **AI chat** | Ngobrol dengan AI, bisa kirim gambar untuk dianalisis. Memakai Gemini, dan kalau gagal otomatis pindah ke Pollinations. |
+| **AI chat** | Ngobrol dengan AI, bisa kirim gambar untuk dianalisis. Grup memakai Agnes, chat pribadi memakai GLM, dan kalau yang satu gagal otomatis pindah ke yang lain. |
 | **Voice note AI** | Jawaban AI bisa dikirim sebagai voice note (`.vn`). |
 | **Buka sekali-lihat** | Buka ulang foto/video sekali-lihat, dikirim ke DM owner (`.peek`, owner only). |
 | **Downloader** | Download video/foto dari link (`.dl`) — Instagram dan TikTok jalan; YouTube masih kena bot-check Google. |
