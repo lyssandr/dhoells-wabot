@@ -215,7 +215,7 @@ async function handlePin4(sock, sender, msg, participant, textMessage) {
 async function handleTiktok(sock, sender, msg, participant, textMessage) {
     if (!textMessage || !textMessage.includes('tiktok.com')) { await sock.sendMessage(sender, { text: '📌 Kirim link TikTok!\nContoh: *.tt https://vt.tiktok.com/xxxxx*' }, { quoted: msg }); return; }
     await sock.sendMessage(sender, { text: '📥 _Sedang download TikTok..._' }, { quoted: msg });
-    try { const tu = `https://www.tikwm.com/api/?url=${encodeURIComponent(textMessage)}`; const { data: td } = await axios.get(tu, { timeout: 15000 }); if (td?.data?.play) { const vb = await downloadImage(td.data.play); await sock.sendMessage(sender, { video: vb, caption: `🎬 *TikTok*\n\n👤 *${td.data.author?.nickname || 'Unknown'}*\n📝 ${(td.data.title || '').substring(0, 200)}` }, { quoted: msg }); } else throw new Error('not found'); } catch (e) { await sock.sendMessage(sender, { text: '❌ Gagal download TikTok.' }, { quoted: msg }); }
+    try { const tu = `https://www.tikwm.com/api/?url=${encodeURIComponent(textMessage)}`; const { data: td } = await axios.get(tu, { timeout: 15000 }); if (td?.data?.play) { const vb = await downloadImage(td.data.play); await sock.sendMessage(sender, { video: vb, caption: `🎬 *TikTok*\n\n👤 *${td.data.author?.nickname || 'Unknown'}*\n📝 ${(td.data.title || '').substring(0, 200)}` }, { quoted: msg }); } else throw new Error('not found'); } catch (e) { if (e.code === 'DOWNLOAD_TOO_LARGE') { await sock.sendMessage(sender, { text: '❌ Video terlalu besar (maksimal 16 MB).' }, { quoted: msg }); } else { await sock.sendMessage(sender, { text: '❌ Gagal download TikTok.' }, { quoted: msg }); } }
 }
 
 async function handleCuaca(sock, sender, msg, participant, textMessage) {
